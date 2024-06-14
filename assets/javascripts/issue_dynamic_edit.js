@@ -235,10 +235,16 @@ document.querySelector('body').addEventListener('click', function(e){
 		let existingIndex = [];
 		inputs.forEach(elt => {
 			let not_multiple = !elt.matches('input[type="radio"]') && !elt.matches('input[type="checkbox"]');
+			const is_multiple_select = elt.tagName === 'SELECT' && elt.multiple === true && elt.selectedOptions.length > 0;
+			
 			if(elt.matches('input[type="radio"]:checked') || elt.matches('input[type="checkbox"]:checked') || not_multiple){
 				if(!existingIndex.includes(elt.getAttribute('name'))){
 					existingIndex.push(elt.getAttribute('name'));
-					formData.push({"name" : elt.getAttribute('name'), "value" : elt.value})
+					if(!is_multiple_select){
+						formData.push({"name" : elt.getAttribute('name'), "value" : elt.value})
+					}else{
+						Array.from(elt.selectedOptions).forEach(opt => formData.push({"name" : elt.getAttribute('name'), "value" : opt.value}))
+					}
 				}
 			}
 		});
