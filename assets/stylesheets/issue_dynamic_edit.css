@@ -150,6 +150,10 @@ body.controller-issues.action-show .dynamicEditField .check_box_group {
 	width:100%;
 }
 
+.wiki-edit.hidden {
+	display: none !important;
+}
+
 /* MOBILE MEDIAQUERY */
 @media screen and (max-width: 899px){
 

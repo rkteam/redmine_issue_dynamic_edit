@@ -151,8 +151,11 @@ const cloneEditForm = function(){
 				let btn_edit = document.createElement('span');
 				btn_edit.classList.add('iconEdit');
 				btn_edit.innerHTML = SVG_EDIT;
-				elt.querySelector('.value').insertBefore(btn_edit, null);
-				elt.querySelector('.value').insertBefore(dynamicEditField, null);
+				let target = elt.querySelector('.value');
+				if(target){
+					target.insertBefore(btn_edit, null);
+					target.insertBefore(dynamicEditField, null);
+				}
 			}
 		}
   	});
@@ -438,5 +441,7 @@ let sendData = function(serialized_data){
 }
 
 // Init plugin
-cloneEditForm();
-setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
+document.addEventListener('DOMContentLoaded', function() {
+	cloneEditForm();
+	setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
+});
