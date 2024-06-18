@@ -135,6 +135,7 @@ body.controller-issues.action-show .dynamicEditField input[type="text"] {
 
 body.controller-issues.action-show .dynamicEditField textarea {
 	width: 100%;
+	max-height: 200px;
 	display: block;
 	margin-bottom: 10px;
 }
