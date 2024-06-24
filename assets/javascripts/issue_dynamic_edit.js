@@ -287,7 +287,7 @@ document.onkeydown = function(evt) {
 };
 
 const checkVersion = function(callback){
-	fetch(LOCATION_HREF, {
+	return fetch(LOCATION_HREF, {
 		method: 'GET',
 		crossDomain: true,
 	}).then(res => res.text()).then(data => {
@@ -310,8 +310,8 @@ const checkVersion = function(callback){
 			}
 		}
 
-		if(callback) callback(distant_version);
-		return distant_version;
+		if(callback) callback(distant_version, current_version);
+		return {distant_version, current_version};
 	}).catch(err => {
 		console.warn('Issue while trying to get version (avoiding conflict)');
 		console.log(err);
@@ -324,7 +324,7 @@ let setCheckVersionInterval = function(activate){
 	if(activate && !checkVersionInterval){
 		checkVersionInterval = window.setInterval(function(){ 
 			if(document.visibilityState === "visible") checkVersion(); 
-		}, 5000);
+		}, 240000);
 	} else {
 		clearInterval(checkVersionInterval);
 		checkVersionInterval = false;
