@@ -30,6 +30,7 @@ body.controller-issues.action-show div.issue.details div.subject {
 
 body.controller-issues.action-show div.issue.details div.subject .refreshData {
 	cursor: pointer;
+	display: none;
 }
 
 body.controller-issues.action-show div.issue.details .splitcontent {
