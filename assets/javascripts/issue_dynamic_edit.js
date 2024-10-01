@@ -91,9 +91,9 @@ const getEditFormHTML = function(attribute){
 	if(formElement){
 		const clone = formElement.cloneNode(true);
 		if(clone.matches('select') && !clone.hasAttribute('multiple')) {
-			clone.addEventListener('change', function(e){
-				sendData([{"name" : clone.getAttribute('name'), "value" : clone.value}]);
-			});
+			clone.onchange = function(e) {
+				sendData([{"name" : e.target.getAttribute('name'), "value" : e.target.value}]);
+			}
 		}
 		if(is_checkboxes || is_file || is_list) {
 			clone.setAttribute('id', "issue_custom_field_values_" + CF_ID + "_dynamic");
