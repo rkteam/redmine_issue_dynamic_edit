@@ -30,6 +30,7 @@ body.controller-issues.action-show div.issue.details div.subject {
 
 body.controller-issues.action-show div.issue.details div.subject .refreshData {
 	cursor: pointer;
+	display: none;
 }
 
 body.controller-issues.action-show div.issue.details .splitcontent {
@@ -135,6 +136,7 @@ body.controller-issues.action-show .dynamicEditField input[type="text"] {
 
 body.controller-issues.action-show .dynamicEditField textarea {
 	width: 100%;
+	max-height: 200px;
 	display: block;
 	margin-bottom: 10px;
 }
@@ -148,6 +150,10 @@ body.controller-issues.action-show .dynamicEditField .check_box_group {
 	border: 0px !important;
 	margin-bottom: 10px;
 	width:100%;
+}
+
+.wiki-edit.hidden {
+	display: none !important;
 }
 
 /* MOBILE MEDIAQUERY */

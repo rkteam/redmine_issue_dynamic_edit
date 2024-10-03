@@ -91,9 +91,9 @@ const getEditFormHTML = function(attribute){
 	if(formElement){
 		const clone = formElement.cloneNode(true);
 		if(clone.matches('select') && !clone.hasAttribute('multiple')) {
-			clone.addEventListener('change', function(e){
-				sendData([{"name" : clone.getAttribute('name'), "value" : clone.value}]);
-			});
+			clone.onchange = function(e) {
+				sendData([{"name" : e.target.getAttribute('name'), "value" : e.target.value}]);
+			}
 		}
 		if(is_checkboxes || is_file || is_list) {
 			clone.setAttribute('id', "issue_custom_field_values_" + CF_ID + "_dynamic");
@@ -151,8 +151,11 @@ const cloneEditForm = function(){
 				let btn_edit = document.createElement('span');
 				btn_edit.classList.add('iconEdit');
 				btn_edit.innerHTML = SVG_EDIT;
-				elt.querySelector('.value').insertBefore(btn_edit, null);
-				elt.querySelector('.value').insertBefore(dynamicEditField, null);
+				let target = elt.querySelector('.value');
+				if(target){
+					target.insertBefore(btn_edit, null);
+					target.insertBefore(dynamicEditField, null);
+				}
 			}
 		}
   	});
@@ -235,10 +238,16 @@ document.querySelector('body').addEventListener('click', function(e){
 		let existingIndex = [];
 		inputs.forEach(elt => {
 			let not_multiple = !elt.matches('input[type="radio"]') && !elt.matches('input[type="checkbox"]');
+			const is_multiple_select = elt.tagName === 'SELECT' && elt.multiple === true && elt.selectedOptions.length > 0;
+			
 			if(elt.matches('input[type="radio"]:checked') || elt.matches('input[type="checkbox"]:checked') || not_multiple){
 				if(!existingIndex.includes(elt.getAttribute('name'))){
 					existingIndex.push(elt.getAttribute('name'));
-					formData.push({"name" : elt.getAttribute('name'), "value" : elt.value})
+					if(!is_multiple_select){
+						formData.push({"name" : elt.getAttribute('name'), "value" : elt.value})
+					}else{
+						Array.from(elt.selectedOptions).forEach(opt => formData.push({"name" : elt.getAttribute('name'), "value" : opt.value}))
+					}
 				}
 			}
 		});
@@ -278,7 +287,7 @@ document.onkeydown = function(evt) {
 };
 
 const checkVersion = function(callback){
-	fetch(LOCATION_HREF, {
+	return fetch(LOCATION_HREF, {
 		method: 'GET',
 		crossDomain: true,
 	}).then(res => res.text()).then(data => {
@@ -301,8 +310,8 @@ const checkVersion = function(callback){
 			}
 		}
 
-		if(callback) callback(distant_version);
-		return distant_version;
+		if(callback) callback(distant_version, current_version);
+		return {distant_version, current_version};
 	}).catch(err => {
 		console.warn('Issue while trying to get version (avoiding conflict)');
 		console.log(err);
@@ -315,7 +324,7 @@ let setCheckVersionInterval = function(activate){
 	if(activate && !checkVersionInterval){
 		checkVersionInterval = window.setInterval(function(){ 
 			if(document.visibilityState === "visible") checkVersion(); 
-		}, 5000);
+		}, 240000);
 	} else {
 		clearInterval(checkVersionInterval);
 		checkVersionInterval = false;
@@ -432,5 +441,7 @@ let sendData = function(serialized_data){
 }
 
 // Init plugin
-cloneEditForm();
-setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
+document.addEventListener('DOMContentLoaded', function() {
+	cloneEditForm();
+	setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
+});
