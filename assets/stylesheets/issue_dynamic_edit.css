@@ -186,3 +186,13 @@ body.controller-issues.action-show .dynamicEditField .check_box_group {
 		padding: 10px;
 	}
 }
+
+
+/* Фикс visual editor в попапе при редаактировании описания */
+.dynamicEditField.open:has(.jstBlock) .jstBlock * {
+	visibility: visible !important;
+}
+
+.dynamicEditField.open:has(.jstBlock) .jstBlock .jstTabs ul > li:not(.tab-elements) {
+	display: none !important;
+}
