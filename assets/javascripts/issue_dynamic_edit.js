@@ -230,8 +230,17 @@ document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_ICON, functi
 });
 
 /* Perform data update when clicking on valid button from edit form */
-document.querySelector('body').addEventListener('click', function(e){
+document.querySelector('body').addEventListener('click', async function(e){
 	if(e.target.matches('.dynamicEditField .action.valid') || e.target.closest('.dynamicEditField .action.valid')){
+
+		// Delay for textile and visual editor toggling
+		const hasEditor = !!e.target.closest('.dynamicEditField').querySelector('.jstBlock');
+		if (!!hasEditor) {
+			await new Promise((resolve) => {
+				setTimeout(() => resolve());
+			});
+		}
+
 		e.preventDefault();
 		let inputs = e.target.closest('.dynamicEditField').querySelectorAll('*[name]');
 		let formData = [];
