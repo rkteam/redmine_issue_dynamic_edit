@@ -221,11 +221,26 @@ document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_ICON, functi
 	let is_description = e.target.matches('div.issue.details div.description > p') || e.target.closest('div.issue.details div.description > p');
 	let is_subject = e.target.matches('div.issue.details div.subject') || e.target.closest('div.issue.details div.subject');
 	if(e.target.matches('.iconEdit') || e.target.closest('.iconEdit')){
+		
+
 		document.querySelectorAll('.dynamicEditField').forEach(function(elt){ elt.classList.remove('open'); });
 		let selector = e.target.closest('.value');
-		if(is_description) selector = e.target.closest('.description');
+		if(is_description) {
+			selector = e.target.closest('.description');
+
+			// TODO Еще один велосипед (2) для автофокуса в тиньку когда открывается окно редактирования описания
+			if (typeof redmineWysiwygEditorManager !== 'undefined' && redmineWysiwygEditorManager.editors?.length) {
+				const fieldId = selector.querySelector('.dynamicEditField textarea[name="issue[description]"]').getAttribute('id');
+				const editor = redmineWysiwygEditorManager.editors.find((editor) => {
+					return editor._jstEditorTextArea[0].getAttribute('id') === fieldId;
+				});
+
+				!!editor && editor._editor.focus();
+			}
+		}
 		if(is_subject) selector = e.target.closest('.subject');
 		if(selector.querySelector('.dynamicEditField')) selector.querySelector('.dynamicEditField').classList.add('open');
+		console.log('222 :>> ', 222);
 	}
 });
 
@@ -233,11 +248,11 @@ document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_ICON, functi
 document.querySelector('body').addEventListener('click', async function(e){
 	if(e.target.matches('.dynamicEditField .action.valid') || e.target.closest('.dynamicEditField .action.valid')){
 
-		// Delay for textile and visual editor toggling
+		// TODO Велосипед (1) для того чтобы из тиньки значение успело удалиться перед отправкой формы
 		const hasEditor = !!e.target.closest('.dynamicEditField').querySelector('.jstBlock');
 		if (!!hasEditor) {
 			await new Promise((resolve) => {
-				setTimeout(() => resolve());
+				setTimeout(() => resolve(true));
 			});
 		}
 
