@@ -240,7 +240,6 @@ document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_ICON, functi
 		}
 		if(is_subject) selector = e.target.closest('.subject');
 		if(selector.querySelector('.dynamicEditField')) selector.querySelector('.dynamicEditField').classList.add('open');
-		console.log('222 :>> ', 222);
 	}
 });
 
