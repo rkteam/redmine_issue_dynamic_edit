@@ -103,6 +103,7 @@ const getEditFormHTML = function(attribute){
 		const wrapper = document.createElement('div');
 		wrapper.classList.add('dynamicEditField');
 		wrapper.insertBefore(clone, null);
+
 		if(!clone.matches('select') || clone.hasAttribute('multiple')) {
 			let btn_valid = document.createElement('button');
 			btn_valid.classList.add('action', 'valid');
@@ -117,6 +118,17 @@ const getEditFormHTML = function(attribute){
 	}
 
 	return null;
+}
+
+const getFormWarnings = (attribute) => {
+	let formElement =  document.querySelector('#issue_' + attribute + "_id");
+	formElement = formElement ? formElement : document.querySelector('#issue_' + attribute);
+	formElement = formElement ? formElement : document.querySelector('#' + attribute);
+	
+	let sibling = formElement ? formElement.nextElementSibling : null;
+	sibling = sibling ? sibling : formElement.parentElement.querySelector('.icon-only');
+
+	return sibling && sibling.classList.contains('icon-only') ? sibling.cloneNode(true) : null;
 }
 
 /* Loop over all form attribute and clone them into details part */
@@ -147,12 +159,14 @@ const cloneEditForm = function(){
 		let selected_elt = custom_field ? custom_field : attributes;
 		if(attributes && !_CONF_EXCLUDED_FIELD_ID.includes(selected_elt)){
 			let dynamicEditField = getEditFormHTML(selected_elt);
+			let warnings = getFormWarnings(selected_elt);
 			if(dynamicEditField){
 				let btn_edit = document.createElement('span');
 				btn_edit.classList.add('iconEdit');
 				btn_edit.innerHTML = SVG_EDIT;
 				let target = elt.querySelector('.value');
 				if(target){
+					if (warnings) target.insertBefore(warnings, null);
 					target.insertBefore(btn_edit, null);
 					target.insertBefore(dynamicEditField, null);
 				}
