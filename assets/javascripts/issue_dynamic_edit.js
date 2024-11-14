@@ -124,11 +124,15 @@ const getFormWarnings = (attribute) => {
 	let formElement =  document.querySelector('#issue_' + attribute + "_id");
 	formElement = formElement ? formElement : document.querySelector('#issue_' + attribute);
 	formElement = formElement ? formElement : document.querySelector('#' + attribute);
-	
-	let sibling = formElement ? formElement.nextElementSibling : null;
-	sibling = sibling ? sibling : formElement.parentElement.querySelector('.icon-only');
 
-	return sibling && sibling.classList.contains('icon-only') ? sibling.cloneNode(true) : null;
+	if (formElement) {
+		let sibling = formElement ? formElement.nextElementSibling : null;
+		sibling = sibling ? sibling : formElement.parentElement.querySelector('.icon-only');
+	
+		return sibling && sibling.classList.contains('icon-only') ? sibling.cloneNode(true) : null;
+	}
+	
+	return null;
 }
 
 /* Loop over all form attribute and clone them into details part */
