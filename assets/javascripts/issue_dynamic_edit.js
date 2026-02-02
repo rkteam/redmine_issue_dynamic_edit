@@ -461,7 +461,7 @@ let sendData = function(serialized_data){
 					}
 					
 					cloneEditForm();
-					textareaForStringCF();
+					textareaForStringCF();	
 
 					//set datepicker fallback for input type date
 					if (
