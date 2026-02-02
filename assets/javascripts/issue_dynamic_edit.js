@@ -327,6 +327,23 @@ document.onkeydown = function(evt) {
     }
 };
 
+// Функция для замены input на textarea для кастомных полей типа "Текст" (string_cf)
+const textareaForStringCF = function(root = document){
+  root.querySelectorAll('.attributes input.string_cf[type="text"]').forEach(input => {
+    const textarea = document.createElement('textarea');
+    
+    textarea.name = input.name;
+    textarea.id = input.id;
+    textarea.className = input.className;
+    textarea.value = input.value;
+    textarea.setAttribute('value', input.value);
+    textarea.rows = 6;
+    textarea.style.resize = 'both';
+
+    input.replaceWith(textarea);
+  });
+};
+
 const checkVersion = function(callback){
 	return fetch(LOCATION_HREF, {
 		method: 'GET',
@@ -444,6 +461,7 @@ let sendData = function(serialized_data){
 					}
 					
 					cloneEditForm();
+					textareaForStringCF();
 
 					//set datepicker fallback for input type date
 					if (
@@ -484,5 +502,6 @@ let sendData = function(serialized_data){
 // Init plugin
 document.addEventListener('DOMContentLoaded', function() {
 	cloneEditForm();
+	textareaForStringCF();
 	setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
 });
