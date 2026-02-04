@@ -132,7 +132,7 @@ body.controller-issues.action-show div.issue div.subject h3 {
 
 body.controller-issues.action-show .string_cf .value {
 	white-space: pre-line;
-	line-height: 1;
+	line-height: 1.4;
 }
 
 body.controller-issues.action-show .text_cf .value {

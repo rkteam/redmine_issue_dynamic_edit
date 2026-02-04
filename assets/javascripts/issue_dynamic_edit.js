@@ -327,30 +327,37 @@ document.onkeydown = function(evt) {
     }
 };
 
-// Функция для экранирования жирного текста через тег <b> для кастомных полей text_cf и string_cf
+// Функция для вывода жирного текста через тег <b> для кастомных полей text_cf и string_cf
 const renderBoldTags = function(root = document) {
     root.querySelectorAll('.text_cf, .string_cf').forEach(element => {
         element.innerHTML = element.innerHTML
             .replace(/&lt;b&gt;/gi, '<b>')
             .replace(/&lt;\/b&gt;/gi, '</b>');
     });
+    
+    root.querySelectorAll('.string_cf .value').forEach(element => {
+        if (element && !element.querySelector('p')) {
+            let text = element.innerHTML;
+            element.innerHTML = `<p>${text}</p>`;
+        }
+    });
 };
 
 // Функция для замены input на textarea для кастомных полей типа "Текст" (string_cf)
 const textareaForStringCF = function(root = document){
-  root.querySelectorAll('.attributes input.string_cf[type="text"]').forEach(input => {
-    const textarea = document.createElement('textarea');
-    
-    textarea.name = input.name;
-    textarea.id = input.id;
-    textarea.className = input.className;
-    textarea.value = input.value;
-    textarea.setAttribute('value', input.value);
-    textarea.rows = 6;
-    textarea.style.resize = 'both';
+    root.querySelectorAll('.attributes input.string_cf[type="text"], .dynamicEditField input.string_cf[type="text"]').forEach(input => {
+        const rawValue = input.getAttribute('value') || '';
+        const textarea = document.createElement('textarea');
+        
+        textarea.name = input.name;
+        textarea.id = input.id;
+        textarea.className = input.className;
+        textarea.textContent = rawValue;
+        textarea.rows = 6;
+        textarea.style.resize = 'both';
 
-    input.replaceWith(textarea);
-  });
+        input.replaceWith(textarea);
+    });
 };
 
 const checkVersion = function(callback){
@@ -470,7 +477,8 @@ let sendData = function(serialized_data){
 					}
 					
 					cloneEditForm();
-					textareaForStringCF();	
+					textareaForStringCF();
+					renderBoldTags();
 					//set datepicker fallback for input type date
 					if (
 						document.querySelector('input[type=date]') &&
@@ -511,6 +519,6 @@ let sendData = function(serialized_data){
 document.addEventListener('DOMContentLoaded', function() {
 	cloneEditForm();
 	textareaForStringCF();
-	renderBoldTags(document);
+	renderBoldTags();
 	setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
 });
