@@ -327,6 +327,15 @@ document.onkeydown = function(evt) {
     }
 };
 
+// Функция для экранирования жирного текста через тег <b> для кастомных полей text_cf и string_cf
+const renderBoldTags = function(root = document) {
+    root.querySelectorAll('.text_cf, .string_cf').forEach(element => {
+        element.innerHTML = element.innerHTML
+            .replace(/&lt;b&gt;/gi, '<b>')
+            .replace(/&lt;\/b&gt;/gi, '</b>');
+    });
+};
+
 // Функция для замены input на textarea для кастомных полей типа "Текст" (string_cf)
 const textareaForStringCF = function(root = document){
   root.querySelectorAll('.attributes input.string_cf[type="text"]').forEach(input => {
@@ -462,7 +471,6 @@ let sendData = function(serialized_data){
 					
 					cloneEditForm();
 					textareaForStringCF();	
-
 					//set datepicker fallback for input type date
 					if (
 						document.querySelector('input[type=date]') &&
@@ -503,5 +511,6 @@ let sendData = function(serialized_data){
 document.addEventListener('DOMContentLoaded', function() {
 	cloneEditForm();
 	textareaForStringCF();
+	renderBoldTags(document);
 	setCSRFTokenInput(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
 });
