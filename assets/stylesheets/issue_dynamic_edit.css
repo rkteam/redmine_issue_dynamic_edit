@@ -130,13 +130,14 @@ body.controller-issues.action-show div.issue div.subject h3 {
 	cursor: pointer;
 }
 
-body.controller-issues.action-show .string_cf .value {
-	line-height: 1.4;
+body.controller-issues.action-show .string_cf .wiki,
+body.controller-issues.action-show .text_cf .wiki {
+    white-space: pre-line;
+	line-height: 0.3;
 }
 
 body.controller-issues.action-show .text_cf .value {
 	width: auto !important;
-	line-height: 1;
 }
 
 body.controller-issues.action-show .dynamicEditField textarea {
