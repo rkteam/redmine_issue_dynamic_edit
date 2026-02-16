@@ -330,7 +330,7 @@ document.onkeydown = function(evt) {
 // Функция для замены input на textarea для кастомных полей типа "Текст" (string_cf)
 const textareaForStringCF = function(root = document){
     root.querySelectorAll('.attributes input.string_cf[type="text"], .dynamicEditField input.string_cf[type="text"]').forEach(input => {
-        const rawValue = input.getAttribute('value') || '';
+        const rawValue = input.value;
         const textarea = document.createElement('textarea');
         
         textarea.name = input.name;
